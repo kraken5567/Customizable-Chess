@@ -6,6 +6,7 @@ My Customizable Chess Game (Python)
 # Things That work (properly) right now:
 
 Save Related: Creation of a (single) save, reading saves
+
 Piece related: knights, rooks, king
 
 
