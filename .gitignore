@@ -1,4 +1,6 @@
 # Byte-compiled / optimized / DLL files
+ChessDebugger
+ChessDrawDebugger
 __pycache__/
 *.py[cod]
 *$py.class
