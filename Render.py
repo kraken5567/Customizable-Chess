@@ -1,20 +1,92 @@
-import math
-from PieceInfoer import *
+import json
 from tkinter import *
 from PIL import ImageTk, Image
 
-def DrawBoard(Size, winWidth, winHeight):
-    root = Tk()
-    root.title('Chess Board')
-    canvas = Canvas(root, width=winWidth, height=winHeight)
-    canvas.pack()
+from PieceInfoer import *
+from Rereader import *
 
-    if winWidth > winHeight:
-        L = winHeight
-    elif winHeight > winWidth:
-        L = winWidth
-    else:
-        L = winWidth
+def initStart():
+    root = Tk()
+    root.title('Multiverse Chess Menu')
+
+    File = open("Options.json","r")
+    winSettings = json.load(File)
+    File.close()
+    winHeight=int(winSettings["xRes"])
+    winWidth=int(winSettings["yRes"])
+
+    Res = Label(root,text="Resolution")
+    xRes = Entry(root)
+    xRes.insert(0,winWidth)
+    yRes = Entry(root)
+    yRes.insert(0,winHeight)
+    
+    Row = Entry(root)
+    Column = Entry(root)
+
+    global Size
+    Size = "None"
+
+    def SizeGetter(Bool,Rows,Columns):
+        global Size
+        Size = Boarder(Bool,Rows,Columns)
+        print(Size)
+
+    Load = Button(root, text="Load Save",command = lambda: SizeGetter(False,Row.get(),Column.get()))
+    Create = Button(root, text="Create Save",command = lambda: SizeGetter(True,Row.get(),Column.get()))
+
+    Res.grid(row=0,columnspan=2)
+
+    xRes.grid(row=1,column=0)
+    yRes.grid(row=1,column=1)
+
+    Row.grid(row=2,column=0)
+    Column.grid(row=2,column=1)
+    
+    Create.grid(row=3,columnspan=2)
+
+    Load.grid(row=4,columnspan=2)
+
+    while Size == "None":
+        root.mainloop()
+
+    root.destroy()
+    SizeList = Size
+    del Size
+    return SizeList
+        
+
+def initWindow(Size):
+
+    with open("Options.json","r") as File:
+        winSettings = json.load(File)
+        File.close()
+
+        win = []
+        for x in winSettings:
+            x.replace("\n","")
+            win.append(x)
+        
+        winHeight=int(win[0])
+        winWidth=int(win[1])
+
+        root = Tk()
+        root.title('Multiverse Chess Board')
+        canvas = Canvas(root, width=winWidth, height=winHeight)
+        canvas.pack()
+
+        if winWidth > winHeight:
+            L = winHeight
+        elif winHeight > winWidth:
+            L = winWidth
+        else:
+            L = winWidth
+
+        
+
+        return root, canvas, L
+
+def DrawBoard(root,Size,L):
 
     yRatio = int(L / Size[0])
     xRatio = int(L / Size[1])
@@ -31,11 +103,11 @@ def DrawBoard(Size, winWidth, winHeight):
             else:
                 color = "#CDCDCD"
             button = Button(root, bg=color, activebackground=color, bd=0)
-            button.place(x=image_x, y=image_y, width=yRatio, height=xRatio)
+            button.place(x=image_x, y=image_y, width=xRatio, height=yRatio)
             button_row.append(button)
         board_buttons.append(button_row)
 
-    return root, canvas, [xRatio, yRatio], board_buttons
+    return [xRatio, yRatio], board_buttons
 
 def DrawPieces(root, All, screenInfo, board_buttons):
     xRatio, yRatio = screenInfo

@@ -1,6 +1,4 @@
 import re
-import tkinter as tk
-from tkinter import filedialog
 
 #get file Dialog to save files to a chosen or forced location (export/localsave)
 
@@ -25,3 +23,74 @@ def BoxConverter():
     with open("ChessSave.txt", "r") as Lined:
         Lists = Lined.read()
         print(Lists)
+
+def Setter(board,All,row,column):
+    for x in All:
+        if x[0] == row and x[1] == column:
+            board[row-1][column-1] = x[3]
+    return board
+
+import json
+
+def Loader():
+    with open("ChessSave.json", "r") as file:
+        Save = json.load(file)
+        rows = Save.splitlines()
+        All = []
+        color = str(rows[-1])
+        n = 0
+    for a, row in enumerate(rows):
+        singleRow = row.replace("|","")
+        if a == len(rows) - 1:
+            break
+        for b, char in enumerate(singleRow):
+            if n < len(color):
+                c = color[n]
+                if char.isalpha():
+                    if char == char.upper():
+                        listAdd=[a,b,char,c]
+                        All.append(listAdd)
+                        n += 1
+    return All
+
+
+def readSize():
+    with open("ChessSave.json", "r") as file:
+        Save = json.load(file)
+        board = Save["Board"]
+        print(board,board[0])
+
+        rows = len(Save["Board"])
+
+        Bool = False
+        if any(board[0]["Row1"][x] in "0123456789" for x in range(len(board[0]["Row1"]))):
+            Bool = True
+
+        if Bool: #== True
+            list = []
+            for character in range(len(board[0]["Row1"])):
+                list.append(board[0]["Row1"][character])
+                if any(board[0]["Row1"][character] in range(10)):
+                    for Len in range(int(board[0]["Row1"][character])):
+                        list.append(Len)
+            columns = len(list)
+        elif Bool == False:
+            columns = len(board[0]["Row1"])
+
+        Size = [rows, columns]
+    return Size
+
+def Boarder(Bool,Rows,Columns):
+    if Bool: # == True
+        tFile = open(r"ChessSave.json", "w")
+        Size = [Rows,Columns]
+        Board = []
+
+        for rowNum in range(len(Rows)+1,1):
+            name = f"Row{rowNum}"
+            Board.append({f"{name}":"8"})
+        file = {"Board":Board, "turn":"w", "White Castle":"KQ", "Black Castle":"kq"}        
+
+    if Bool == False:
+        Size = readSize()
+    return Size

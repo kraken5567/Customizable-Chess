@@ -1,0 +1,14 @@
+{
+    "Board":[{"Row1":"rnbqkbnr"},
+    {"Row2":"pppppppp"},
+    {"Row3":"8"},
+    {"Row4":"8"},
+    {"Row5":"8"},
+    {"Row6":"8"},
+    {"Row7":"PPPPPPPP"},
+    {"Row8":"RNBQKBNR"}],
+
+    "turn":"w", 
+    "White Castle":"KQ",
+    "Black Castle":"kq"
+}
