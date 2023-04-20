@@ -3,6 +3,8 @@ import json
 
 def pieceInQuestion(All,x):
     LegalSqrs = []
+    print(All,x)
+    print(All[x])
     P = All[x]
     library = "Pieces/"+P[3]+P[2]
     extJson = '.json'

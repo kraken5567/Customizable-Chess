@@ -18,16 +18,15 @@ def Main(Game):
             
         Size = Boarder()
         All = Loader()
-        Clicked = False
-        Screen = [0, 0, False]
-        Change = True
-        loopCount = 0
 
-        while Game == True:
-            Game = Draw(Size,winWidth,winHeight,All,Screen,Change)
+        root, canvas, screenInfo, board_buttons = DrawBoard(Size,winWidth,winHeight)
+        Game = DrawPieces(root, All, screenInfo, board_buttons)
+
+        while True:
+            root.mainloop()
+
     return winWidth, winHeight
 
-if True:
-    global Game
-    Game = True
-    Main(Game)
+global Game
+Game = True
+Main(Game)
