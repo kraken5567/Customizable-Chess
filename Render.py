@@ -30,7 +30,6 @@ def initStart():
     def SizeGetter(Bool,Rows,Columns):
         global Size
         Size = Boarder(Bool,Rows,Columns)
-        print(Size)
 
     Load = Button(root, text="Load Save",command = lambda: SizeGetter(False,Row.get(),Column.get()))
     Create = Button(root, text="Create Save",command = lambda: SizeGetter(True,Row.get(),Column.get()))
@@ -48,7 +47,7 @@ def initStart():
     Load.grid(row=4,columnspan=2)
 
     while Size == "None":
-        root.mainloop()
+        root.update()
 
     root.destroy()
     SizeList = Size
@@ -58,33 +57,27 @@ def initStart():
 
 def initWindow(Size):
 
-    with open("Options.json","r") as File:
-        winSettings = json.load(File)
-        File.close()
+    File = open("Options.json","r")
+    winSettings = json.load(File)
+    
+    winHeight=int(winSettings["xRes"])
+    winWidth=int(winSettings["yRes"])
 
-        win = []
-        for x in winSettings:
-            x.replace("\n","")
-            win.append(x)
-        
-        winHeight=int(win[0])
-        winWidth=int(win[1])
+    root = Tk()
+    root.title('Multiverse Chess Board')
+    canvas = Canvas(root, width=winWidth, height=winHeight)
+    canvas.pack()
 
-        root = Tk()
-        root.title('Multiverse Chess Board')
-        canvas = Canvas(root, width=winWidth, height=winHeight)
-        canvas.pack()
+    if winWidth > winHeight:
+        L = winHeight
+    elif winHeight > winWidth:
+        L = winWidth
+    else:
+        L = winWidth
 
-        if winWidth > winHeight:
-            L = winHeight
-        elif winHeight > winWidth:
-            L = winWidth
-        else:
-            L = winWidth
+    File.close()
 
-        
-
-        return root, canvas, L
+    return root, canvas, L
 
 def DrawBoard(root,Size,L):
 
