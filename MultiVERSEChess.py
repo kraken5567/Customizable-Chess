@@ -1,7 +1,7 @@
 from Render import *
 from Rereader import *
 
-def Main(Game):
+def Main():
 
     Size = initStart()
 
@@ -10,12 +10,10 @@ def Main(Game):
     All = Loader()
 
     screenInfo, board_buttons = DrawBoard(root, Size, L)
-    Game = DrawPieces(root, All, screenInfo, board_buttons)
+    DrawPieces(root, All, screenInfo, board_buttons)
 
     root.mainloop()
 
     return 
 
-global Game
-Game = True
-Main(Game)
+Main()

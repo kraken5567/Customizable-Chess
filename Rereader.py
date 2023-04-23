@@ -36,10 +36,18 @@ def Loader():
     with open("ChessSave.json", "r") as file:
         Save = json.load(file)
         rows = Save["Board"]
-        All = []
-        
-    return All
 
+    All = []
+    for row_number, row_data in enumerate(rows):
+        row = row_data[f"Row{row_number + 1}"]
+        for col, letter in enumerate(row):
+            if letter.isdigit():
+                break
+            else:
+                color = 'w' if letter.isupper() else 'b'
+                All.append([7-row_number, col, letter.lower(), color])
+    
+    return All
 
 def readSize():
     with open("ChessSave.json", "r") as file:
@@ -68,14 +76,17 @@ def readSize():
 
 def Boarder(Bool,Rows,Columns):
     if Bool: # == True
-        tFile = open(r"ChessSave.json", "w")
-        Size = [Rows,Columns]
+        JSON = open(r"ChessSave.json", "w")
+        Size = [int(Rows),int(Columns)]
         Board = []
 
-        for rowNum in range(len(Rows)+1,1):
+        for rowNum in range(1,int(Rows)+1):
             name = f"Row{rowNum}"
-            Board.append({f"{name}":"8"})
-        file = {"Board":Board, "turn":"w", "White Castle":"KQ", "Black Castle":"kq"}        
+            Board.append({f"{name}":f"{Columns}"})
+
+        file = {"Board":Board, "turn":"w", "White Castle":"KQ", "Black Castle":"kq"}
+        print(len(file))
+        json.dump(file, JSON, indent=1)       
 
     if Bool == False:
         Size = readSize()
